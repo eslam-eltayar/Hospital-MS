@@ -15,8 +15,8 @@ namespace Hospital_MS.Core.Specifications.Admissions
         {
             AddIncludes();
         }
-        public AdmissionSpecification(int id)
-            : base(x => x.Id == id)
+        public AdmissionSpecification(int patientId)
+            : base(x => x.PatientId == patientId)
         {
             AddIncludes();
         }

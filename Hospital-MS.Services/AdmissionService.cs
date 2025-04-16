@@ -95,6 +95,7 @@ namespace Hospital_MS.Services
                 DateOfBirth = admission.Patient.DateOfBirth,
                 Phone = admission.Patient.Phone,
                 Address = admission.Patient.Address,
+                PatientStatus = admission.Patient.Status.ToString(),
 
                 AdmissionDate = admission.AdmissionDate,
                 RoomNumber = admission.Room.Number,
@@ -132,9 +133,9 @@ namespace Hospital_MS.Services
             return Result.Success<IReadOnlyList<AdmissionResponse>>(response);
         }
 
-        public async Task<Result<AdmissionResponse>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Result<AdmissionResponse>> GetByIdAsync(int patientId, CancellationToken cancellationToken = default)
         {
-            var spec = new AdmissionSpecification(id);
+            var spec = new AdmissionSpecification(patientId);
 
             var admission = await _unitOfWork.Repository<Admission>().GetByIdWithSpecAsync(spec, cancellationToken);
 
@@ -144,11 +145,11 @@ namespace Hospital_MS.Services
             var response = new AdmissionResponse
             {   
                 PatientName = admission.Patient.FullName,
-                PatientId = admission.PatientId,
-                //MedicalNumber = admission.Patient.MedicalNumber,
+                PatientId = admission.PatientId, 
                 DateOfBirth = admission.Patient.DateOfBirth,
                 Phone = admission.Patient.Phone,
                 Address = admission.Patient.Address,
+                PatientStatus = admission.Patient.Status.ToString(),
 
                 AdmissionDate = admission.AdmissionDate,
                 RoomNumber = admission.Room.Number,

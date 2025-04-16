@@ -11,10 +11,11 @@ namespace Hospital_MS.Core.Contracts.Admissions
         // Patient Information
         public string PatientName { get; set; } = string.Empty;
         public int PatientId { get; set; }
-        public string? MedicalNumber { get; set; }
+        //public string? MedicalNumber { get; set; }
         public DateOnly? DateOfBirth { get; set; }
         public string? Phone { get; set; }
         public string? Address { get; set; }
+        public string PatientStatus { get; set; }
 
         // Admission Details
         public DateTime AdmissionDate { get; set; }

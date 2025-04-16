@@ -34,10 +34,10 @@ namespace Hospital_MS.API.Controllers
                 : NotFound(result.Error);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAdmission(int id, CancellationToken cancellationToken)
+        [HttpGet("{patientId}")]
+        public async Task<IActionResult> GetAdmission(int patientId, CancellationToken cancellationToken)
         {
-            var result = await _admissionService.GetByIdAsync(id, cancellationToken);
+            var result = await _admissionService.GetByIdAsync(patientId, cancellationToken);
             return result.IsSuccess
                 ? Ok(result.Value)
                 : NotFound(result.Error);
