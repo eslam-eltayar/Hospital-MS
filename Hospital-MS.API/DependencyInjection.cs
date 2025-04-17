@@ -58,6 +58,8 @@ namespace Hospital_MS.API
             services.AddScoped<IWardService, WardService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IBedService, BedService>();
+            services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<IInsuranceService, InsuranceService>();
 
 
             return services;

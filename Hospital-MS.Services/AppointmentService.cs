@@ -26,12 +26,11 @@ namespace Hospital_MS.Services
 
                 var patient = new Patient
                 {
-                    //FullName = request.PatientName,
                     FullName = ArabicNormalizer.NormalizeArabic(request.PatientName),
                     Phone = request.PatientPhone,
                     InsuranceCompanyId = request.InsuranceCompanyId,
                     InsuranceCategoryId = request.InsuranceCategoryId,
-
+                    Status = PatientStatus.Outpatient,
                 };
 
                 await _unitOfWork.Repository<Patient>().AddAsync(patient, cancellationToken);
@@ -130,6 +129,14 @@ namespace Hospital_MS.Services
                 CreatedBy = $"{appointment.CreatedBy.FirstName} {appointment.CreatedBy.LastName}",
                 UpdatedBy = $"{appointment?.UpdatedBy?.FirstName} {appointment?.UpdatedBy?.LastName}" ?? string.Empty,
                 PatientPhone = appointment?.Patient?.Phone,
+
+                CompanionName = appointment.CompanionName,
+                CompanionNationalId = appointment.CompanionNationalId,
+                CompanionPhone = appointment.CompanionPhone,
+                EmergencyLevel = appointment.EmergencyLevel,
+                ClinicId = appointment.ClinicId,
+                ClinicName = appointment?.Clinic?.Name,
+
             };
 
             return Result.Success(response);
@@ -169,6 +176,37 @@ namespace Hospital_MS.Services
             appointment.AppointmentDateTime = request.AppointmentDate;
             appointment.PaymentMethod = request.PaymentMethod;
             appointment.Type = appointmentType;
+
+            _unitOfWork.Repository<Appointment>().Update(appointment);
+
+            await _unitOfWork.CompleteAsync(cancellationToken);
+
+            return Result.Success();
+        }
+
+        public async Task<Result> UpdateStatusAsync(int id, UpdatePatientStatusInEmergencyRequest request, CancellationToken cancellationToken = default)
+        {
+            var spec = new AppointmentSpecification(id);
+
+            var appointment = await _unitOfWork.Repository<Appointment>().GetByIdWithSpecAsync(spec, cancellationToken);
+
+            if (appointment is not { })
+                return Result.Failure(GenericErrors<Appointment>.NotFound);
+
+            if (appointment.Type != AppointmentType.Emergency)
+                return Result.Failure(new Error("Appointment.NotEmergency", "This action only allowed to Emergency Type", 400));
+
+            if (request.NewStatus == "General")
+            {
+                var newType = Enum.Parse<AppointmentType>(request.NewStatus);
+                appointment.Type = newType;
+                request.NewStatus = "Outpatient";
+            }
+
+            if (!Enum.TryParse<PatientStatus>(request.NewStatus, true, out var newStatus))
+                return Result.Failure(new Error("Patient.InvalidStatus", $"Invalid Status: {request.NewStatus}", 400));
+
+            appointment.Patient.Status = newStatus;
 
             _unitOfWork.Repository<Appointment>().Update(appointment);
 

@@ -75,77 +75,19 @@ namespace Hospital_MS.Services
 
         }
 
-        public Task<int> GetAdmissionsCountAsync(GetAdmissionsRequest request, CancellationToken cancellationToken = default)
-        {
-            var spec = new AdmissionCountSpecification(request);
-
-            return _unitOfWork.Repository<Admission>().GetCountAsync(spec, cancellationToken);
-        }
-
-        public async Task<Result<IReadOnlyList<AdmissionResponse>>> GetAllAsync(GetAdmissionsRequest request, CancellationToken cancellationToken = default)
-        {
-            var spec = new AdmissionSpecification(request);
-
-            var admissions = await _unitOfWork.Repository<Admission>().GetAllWithSpecAsync(spec, cancellationToken);
-
-            var response = admissions.Select(admission => new AdmissionResponse
-            {
-                PatientName = admission.Patient.FullName,
-                PatientId = admission.PatientId,
-                DateOfBirth = admission.Patient.DateOfBirth,
-                Phone = admission.Patient.Phone,
-                Address = admission.Patient.Address,
-                PatientStatus = admission.Patient.Status.ToString(),
-
-                AdmissionDate = admission.AdmissionDate,
-                RoomNumber = admission.Room.Number,
-                BedNumber = admission.Bed.Number,
-                DepartmentName = admission.Department.Name,
-                DoctorName = admission.Doctor.FullName,
-
-                InsuranceCompanyName = admission.Patient.InsuranceCompany?.Name,
-                InsuranceCategoryName = admission.Patient.InsuranceCategory?.Name,
-                InsuranceNumber = admission.Patient.InsuranceNumber,
-
-                EmergencyContact01 = admission.Patient.EmergencyContact01,
-                EmergencyPhone01 = admission.Patient.EmergencyPhone01,
-                EmergencyContact02 = admission.Patient.EmergencyPhone02,
-                EmergencyPhone02 = admission.Patient.EmergencyPhone02,
-
-                HealthStatus = admission.HealthStatus,
-                InitialDiagnosis = admission.InitialDiagnosis,
-
-                HasCompanion = admission.HasCompanion,
-                CompanionName = admission.CompanionName,
-                CompanionPhone = admission.CompanionPhone,
-                CompanionNationalId = admission.CompanionNationalId,
-                Notes = admission.Notes,
-
-                CreatedOn = admission.CreatedOn,
-                CreatedBy = $"{admission.CreatedBy?.FirstName} {admission.CreatedBy?.LastName}",
-                UpdatedOn = admission.UpdatedOn,
-                UpdatedBy = admission.UpdatedBy != null ?
-                    $"{admission.UpdatedBy.FirstName} {admission.UpdatedBy.LastName}" :
-                    string.Empty
-
-            }).ToList().AsReadOnly();
-
-            return Result.Success<IReadOnlyList<AdmissionResponse>>(response);
-        }
-
         public async Task<Result<AdmissionResponse>> GetByIdAsync(int patientId, CancellationToken cancellationToken = default)
         {
             var spec = new AdmissionSpecification(patientId);
 
             var admission = await _unitOfWork.Repository<Admission>().GetByIdWithSpecAsync(spec, cancellationToken);
 
-            if (admission == null)
+            if (admission is not { })
                 return Result.Failure<AdmissionResponse>(GenericErrors<Admission>.NotFound);
 
             var response = new AdmissionResponse
-            {   
+            {
                 PatientName = admission.Patient.FullName,
-                PatientId = admission.PatientId, 
+                PatientId = admission.PatientId,
                 DateOfBirth = admission.Patient.DateOfBirth,
                 Phone = admission.Patient.Phone,
                 Address = admission.Patient.Address,

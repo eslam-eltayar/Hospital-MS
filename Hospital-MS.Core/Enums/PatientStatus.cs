@@ -8,5 +8,6 @@
         Surgery,
         FollowUp,
         Staying,
+        Outpatient // عيادات خارجية
     }
 }

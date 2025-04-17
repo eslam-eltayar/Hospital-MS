@@ -20,31 +20,6 @@ namespace Hospital_MS.Core.Specifications.Admissions
         {
             AddIncludes();
         }
-
-        public AdmissionSpecification(GetAdmissionsRequest request)
-            : base(x =>
-                    (string.IsNullOrEmpty(request.Status) ||
-                    x.Patient.Status == Enum.Parse<PatientStatus>(request.Status)))
-
-        {
-            AddIncludes();
-            ApplyOrderByDescending(x => x.Id);
-
-            var pageIndexHelper = 0;
-
-            if ((request.PageIndex - 1) < 0)
-            {
-                pageIndexHelper = 0;
-            }
-            else
-            {
-                pageIndexHelper = request.PageIndex - 1;
-
-            }
-
-            ApplyPagination(pageIndexHelper * request.PageSize, request.PageSize);
-        }
-
         private void AddIncludes()
         {
             Includes.Add(x => x.CreatedBy);

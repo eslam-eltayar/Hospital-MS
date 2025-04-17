@@ -32,5 +32,12 @@ namespace Hospital_MS.Core.Contracts.Appointments
         public string? PaymentMethod { get; set; } 
         public string? Type { get; set; }
 
+
+        // بيانات الطوارئ
+        public string? EmergencyLevel { get; set; }          // درجة الخطورة
+        public string? CompanionName { get; set; }
+        public string? CompanionNationalId { get; set; }
+        public string? CompanionPhone { get; set; }
+
     }
 }

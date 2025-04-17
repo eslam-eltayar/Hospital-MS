@@ -63,6 +63,17 @@ namespace Hospital_MS.API.Controllers
                 : BadRequest(result.Error);
         }
 
+        [HttpPut("emergency/{id}")]
+        public async Task<IActionResult> UpdatePatientStatusInEmergency(
+            int id, 
+            [FromBody] UpdatePatientStatusInEmergencyRequest request,
+            CancellationToken cancellationToken)
+        {
+            var result = await _appointmentService.UpdateStatusAsync(id, request, cancellationToken);
+
+            return result.IsSuccess
+                ?NoContent() : BadRequest(result.Error);
+        }
 
     }
 }

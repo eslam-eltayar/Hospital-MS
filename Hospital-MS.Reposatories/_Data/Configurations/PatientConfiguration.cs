@@ -34,6 +34,9 @@ namespace Hospital_MS.Reposatories._Data.Configurations
             builder.Property(p => p.Email)
                    .HasMaxLength(100);
 
+            builder.Property(p => p.Notes)
+                   .HasMaxLength(1000);
+
 
             builder.Property(p => p.Address)
                    .HasMaxLength(255);

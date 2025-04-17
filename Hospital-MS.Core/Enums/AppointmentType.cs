@@ -10,16 +10,16 @@ namespace Hospital_MS.Core.Enums
     public enum AppointmentType
     {
         [EnumMember(Value = "كشف")]
-        General, // كشف
+        General, 
         [EnumMember(Value = "استشاره")]
-        Consultation, // استشاره
+        Consultation, 
         [EnumMember(Value = "عمليه")]
-        Surgery, // عمليات
+        Surgery, 
         [EnumMember(Value = "تحاليل")]
-        Screening, // تحاليل
+        Screening, 
         [EnumMember(Value = "اشعه")]
-        Radiology ,// أشعه
+        Radiology ,
         [EnumMember(Value = "طوارئ")]
-        Emergency, // طوارئ
+        Emergency
     }
 }

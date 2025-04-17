@@ -5,20 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hospital_MS.Core.Contracts.Appointments
+namespace Hospital_MS.Core.Contracts.Patients
 {
-    public class GetAppointmentsRequest
+    public class GetPatientsRequest
     {
-        public string? Type { get; set; }
+        public string? Status { get; set; }
 
-
-        private const int maxPageSize = 20; 
-        private int pageSize = 16; 
+        private const int maxPageSize = 20;
+        private int pageSize = 16;
 
         public int PageSize
         {
             get => pageSize;
-            set => pageSize = (value > maxPageSize) ? maxPageSize : value; 
+            set => pageSize = (value > maxPageSize) ? maxPageSize : value;
         }
 
         public int PageIndex { get; set; } = 1;
@@ -32,5 +31,7 @@ namespace Hospital_MS.Core.Contracts.Appointments
 
         }
 
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 }
